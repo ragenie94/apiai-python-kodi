@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from urllib.parse import urlparse, urlencode
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
+#from urllib.parse import urlparse, urlencode
+#from urllib.request import urlopen, Request
+#from urllib.error import HTTPError
 from flask import Flask
 from flask import request
 from flask import make_response
