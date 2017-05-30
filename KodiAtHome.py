@@ -2,12 +2,21 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from urllib.parse import urlparse, urlencode
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
+from flask import Flask
+from flask import request
+from flask import make_response
 
 import os
 import sys
 import json
 import apiai
 from kodipydent import Kodi
+
+# Flask app should start in global layout
+app = Flask(__name__)
 
 HOST = '192.168.2.118'
 PORT = '8080'
@@ -100,4 +109,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    port = int(os.getenv('PORT', 5000))
+
+    print("Starting app on port %d" % port)
+
+    app.run(debug=False, port=port, host='0.0.0.0')
