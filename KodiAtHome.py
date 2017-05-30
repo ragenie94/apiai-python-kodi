@@ -7,13 +7,12 @@ import os
 import sys
 import json
 import apiai
-import kodipydent
+from kodipydent import Kodi
 
 HOST = '192.168.2.118'
 PORT = '8080'
 USERNAME = 'kodi'
 PASSWORD = 'password'
-my_kodi = Kodi(host = HOST, port = PORT, username = USERNAME, password = PASSWORD)
 SORT = {"order": "ascending", "method": "title"}
 
 CLIENT_ACCESS_TOKEN = 'b587fe1645ab47a98e58de785ca0bb5f'
@@ -81,7 +80,9 @@ def music(genre, details, artistName):
     songs = my_kodi.AudioLibrary.GetSongs(filter = finalFilter)
     pass
 
+@app.route('/webhook', methods=['POST'])
 def main():
+    my_kodi = Kodi(host = HOST, port = PORT, username = USERNAME, password = PASSWORD)
     ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
     request = ai.text_request()
     response = json.loads(request.getresponse().read())
