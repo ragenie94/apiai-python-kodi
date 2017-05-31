@@ -68,7 +68,7 @@ def video(genre, details, firstName, lastName, mediaType):
         genreFilter['value'] = genre
 
     for detail in details:
-        if (detail == u'actor' | detail == u'director'):
+        if (detail == u"actor" | detail == u"director"):
             nameFilter['operator'] = 'contains'
             nameFilter['field'] = detail
 
@@ -76,7 +76,7 @@ def video(genre, details, firstName, lastName, mediaType):
             elif(lastName == '') : nameFilter['value'] = firstName
             else : nameFilter['value'] = firstName + ' '+ lastName
 
-        elif (detail == u'in progress') : 
+        elif (detail == u"in progress") : 
             inprogressFilter['operator'] = 'true'
             inprogressFilter['field'] = 'inprogress'
             inprogressFilter['value'] = 'true'
