@@ -22,17 +22,16 @@ HOST = '192.228.162.157'
 PORT = '8080'
 USERNAME = 'kodi'
 PASSWORD = 'rajinimohan'
-SORT = {"order": "ascending", "method": "title"}
+my_kodi = Kodi(HOST, port = PORT, username = USERNAME, password = PASSWORD)
+#SORT = {"order": "ascending", "method": "title"}
 
 CLIENT_ACCESS_TOKEN = 'b587fe1645ab47a98e58de785ca0bb5f'
 
 @app.route('/webhook', methods=['POST'])
 def main():
-    print('Hello World')
     req = request.get_json(silent=True, force=True)
     print(json.dumps(req, indent=4))
 
-    my_kodi = Kodi(HOST, port = PORT, username = USERNAME, password = PASSWORD)
     ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 
     result = req['result']
