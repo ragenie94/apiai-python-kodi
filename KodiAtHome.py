@@ -36,14 +36,13 @@ def main():
     ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 
     result = req['result']
-    print(result)
-    mediaType = result.get('media-types')
-    artistName = result.get('music-artist')
-    musicGenre = result.get('music-genre')
-    details = result.get('media-details')
-    movieGenre = result.get('movie-genre')
-    firstName = result.get('given-name')
-    lastName = result.get('last-name')
+    mediaType = result.get('parameters').get('media-types')
+    artistName = result.get('parameters').get('music-artist')
+    musicGenre = result.get('parameters').get('music-genre')
+    details = result.get('parameters').get('media-details')
+    movieGenre = result.get('parameters').get('movie-genre')
+    firstName = result.get('parameters').get('given-name')
+    lastName = result.get('parameters').get('last-name')
 
     print(mediaType)
     print(artistName)
