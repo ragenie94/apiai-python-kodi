@@ -60,7 +60,9 @@ def main():
     result = searchResult['result']
     limits = result['limits']
     totalResults = limits['total']
-    speech = "Found %d matches" %(totalResults)
+    if(totalResults != None) :
+        speech = "Found %d matches" %(totalResults)
+    else : speech = "There has been an error"
 
     response = {
         "speech": speech,
