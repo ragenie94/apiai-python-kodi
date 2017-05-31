@@ -32,7 +32,7 @@ def main():
     req = request.get_json(silent=True, force=True)
     print(json.dumps(req, indent=4))
 
-    #my_kodi = Kodi(HOST, port = PORT, username = USERNAME, password = PASSWORD)
+    my_kodi = Kodi(HOST, port = PORT, username = USERNAME, password = PASSWORD)
     ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 
     result = req['result']
