@@ -52,10 +52,10 @@ def main():
     print(firstName)
     print(lastName)
 
-    #if mediaType == 'music':
-    #    music(artistName = artistName, genre = musicGenre, details = details)
-    #elif mediaType == 'movie':
-    #    video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
+    if mediaType == 'music':
+        print(music(artistName = artistName, genre = musicGenre, details = details))
+    elif mediaType == 'movie':
+        print(video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType))
 
 def video(genre, details, firstName, lastName, mediaType):
     genreFilter = {}
