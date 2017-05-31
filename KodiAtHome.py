@@ -26,6 +26,24 @@ SORT = {"order": "ascending", "method": "title"}
 
 CLIENT_ACCESS_TOKEN = 'b587fe1645ab47a98e58de785ca0bb5f'
 
+@app.route('/webhook', methods=['POST'])
+def main():
+    my_kodi = Kodi(host = HOST, port = PORT, username = USERNAME, password = PASSWORD)
+    ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
+    request = ai.text_request()
+    response = json.loads(request.getresponse().read())
+
+    result = response['result']
+    mediaType = result.get('media-types')
+
+    if mediaType == 'music':
+        music(artistName = result.get('music-artist'), genre = result.get('music-genre'), details = result.get('media-details'))
+    elif mediaType == 'movie':
+        video(genre = result.get('movie-genre'), details = result.get('media-details'), firstName = result.get('given-name'), lastName = result.get('last-name'), mediaType = mediaType)
+
+
+    requestedMediaDetails = result.get('media-details')
+
 def video(genre, details, firstName, lastName, mediaType):
     genreFilter = {}
     nameFilter = {}
@@ -87,29 +105,9 @@ def music(genre, details, artistName):
 
     finalFilter = {"and": filterList}
     songs = my_kodi.AudioLibrary.GetSongs(filter = finalFilter)
-    pass
-
-@app.route('/webhook', methods=['POST'])
-def main():
-    my_kodi = Kodi(host = HOST, port = PORT, username = USERNAME, password = PASSWORD)
-    ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
-    request = ai.text_request()
-    response = json.loads(request.getresponse().read())
-
-    result = response['result']
-    mediaType = result.get('media-types')
-
-    if mediaType == 'music':
-        music(artistName = result.get('music-artist'), genre = result.get('music-genre'), details = result.get('media-details'))
-    elif mediaType == 'movie':
-        video(genre = result.get('movie-genre'), details = result.get('media-details'), firstName = result.get('given-name'), lastName = result.get('last-name'), mediaType = mediaType)
-
-
-    requestedMediaDetails = result.get('media-details')
-
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.getenv('PORT', 8080))
 
     print("Starting app on port %d" % port)
 
