@@ -57,7 +57,8 @@ def main():
     elif mediaType == 'movie':
         searchResult = video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
 
-    limits = searchResult['limits']
+    result = searchResult['result']
+    limits = result['limits']
     totalResults = limits['total']
     speech = "Found %d matches" %(totalResults)
 
