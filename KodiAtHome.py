@@ -69,7 +69,7 @@ def video(genre, details, firstName, lastName, mediaType):
 
     for detail in details:
         print(detail)
-        if (detail == 'actor' | detail == 'director'):
+        if (detail == 'actor') or (detail == 'director'):
             nameFilter['operator'] = 'contains'
             nameFilter['field'] = detail
 
