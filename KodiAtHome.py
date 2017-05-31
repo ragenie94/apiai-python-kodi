@@ -18,7 +18,7 @@ from kodipydent import Kodi
 # Flask app should start in global layout
 app = Flask(__name__)
 
-HOST = '192.168.2.118'
+HOST = '192.228.162.157'
 PORT = '8080'
 USERNAME = 'kodi'
 PASSWORD = 'rajinimohan'
