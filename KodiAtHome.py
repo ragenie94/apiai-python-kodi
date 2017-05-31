@@ -28,6 +28,7 @@ CLIENT_ACCESS_TOKEN = 'b587fe1645ab47a98e58de785ca0bb5f'
 
 @app.route('/webhook', methods=['POST'])
 def main():
+    print('Hello World')
     req = request.get_json(silent=True, force=True)
     print(json.dumps(req, indent=4))
 
