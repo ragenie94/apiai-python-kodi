@@ -33,22 +33,30 @@ def main():
     print(json.dumps(req, indent=4))
 
     #my_kodi = Kodi(HOST, port = PORT, username = USERNAME, password = PASSWORD)
-    #ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
-    #req = request.get_json(silent=True, force=True)
-    #print(json.dumps(req, indent=4))
-    ##response = json.loads(request.getresponse().read())
-    ##print(response)
+    ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 
-    #result = response['result']
-    #mediaType = result.get('media-types')
+    result = req['result']
+    print(result)
+    mediaType = result.get('media-types')
+    artistName = result.get('music-artist')
+    musicGenre = result.get('music-genre')
+    details = result.get('media-details')
+    movieGenre = result.get('movie-genre')
+    firstName = result.get('given-name')
+    lastName = result.get('last-name')
+
+    print(mediaType)
+    print(artistName)
+    print(musicGenre)
+    print(details)
+    print(movieGenre)
+    print(firstName)
+    print(lastName)
 
     #if mediaType == 'music':
-    #    music(artistName = result.get('music-artist'), genre = result.get('music-genre'), details = result.get('media-details'))
+    #    music(artistName = artistName, genre = musicGenre, details = details)
     #elif mediaType == 'movie':
-    #    video(genre = result.get('movie-genre'), details = result.get('media-details'), firstName = result.get('given-name'), lastName = result.get('last-name'), mediaType = mediaType)
-
-
-    #requestedMediaDetails = result.get('media-details')
+    #    video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
 
 def video(genre, details, firstName, lastName, mediaType):
     genreFilter = {}
