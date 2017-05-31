@@ -9,6 +9,7 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
+import string
 import os
 import sys
 import json
@@ -68,7 +69,7 @@ def video(genre, details, firstName, lastName, mediaType):
         genreFilter['value'] = genre
 
     for detail in details:
-        if (detail == u"actor" | detail == u"director"):
+        if (detail == 'actor' | detail == 'director'):
             nameFilter['operator'] = 'contains'
             nameFilter['field'] = detail
 
