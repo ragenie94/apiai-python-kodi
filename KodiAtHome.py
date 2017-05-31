@@ -51,10 +51,27 @@ def main():
     print(firstName)
     print(lastName)
 
+    searchResult = {}
     if mediaType == 'music':
-        print(music(artistName = artistName, genre = musicGenre, details = details))
+        searchResult = music(artistName = artistName, genre = musicGenre, details = details)
     elif mediaType == 'movie':
-        print(video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType))
+        searchResult = video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
+
+    totalResults = searchResult[limits[total]]
+    speech = "Found %d matches" %(totalResults)
+
+    response = {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "raj-apiai-python-kodi"
+    }
+
+    res = json.dumps(response, indent=4)
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
 
 def video(genre, details, firstName, lastName, mediaType):
     genreFilter = {}
