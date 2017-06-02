@@ -29,39 +29,42 @@ CLIENT_ACCESS_TOKEN = 'b587fe1645ab47a98e58de785ca0bb5f'
 
 @app.route('/webhook', methods=['POST'])
 def main():
-    req = request.get_json(silent=True, force=True)
+    req = request.get_json(silent=True, force=True) #get POST from API.ai
     print(json.dumps(req, indent=4))
 
-    ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
+    ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN) #allow sending responses back
 
     result = req['result']
-    mediaType = result.get('parameters').get('media-types')
-    artistName = result.get('parameters').get('music-artist')
-    musicGenre = result.get('parameters').get('music-genre')
+    action = result.get('action')
     details = result.get('parameters').get('media-details')
-    movieGenre = result.get('parameters').get('movie-genre')
     firstName = result.get('parameters').get('given-name')
     lastName = result.get('parameters').get('last-name')
 
-    print(mediaType)
-    print(artistName)
-    print(musicGenre)
     print(details)
-    print(movieGenre)
     print(firstName)
     print(lastName)
 
     searchResult = {}
-    if mediaType == 'music':
-        searchResult = music(artistName = artistName, genre = musicGenre, details = details)
-    elif mediaType == 'movie':
-        searchResult = video(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
+    if action == 'search.music':
+        artistName = result.get('parameters').get('music-artist')
+        musicGenre = result.get('parameters').get('music-genre')
+        print(artistName)
+        print(musicGenre)
+        searchResult = musicSearch(artistName = artistName, genre = musicGenre, details = details)
+    elif action == 'search.video':
+        mediaType = result.get('parameters').get('media-types')
+        movieGenre = result.get('parameters').get('movie-genre')
+        print(mediaType)
+        print(movieGenre)
+        searchResult = videoSearch(genre = movieGenre, details = details, firstName = firstName, lastName = lastName, mediaType = mediaType)
 
     result = searchResult['result']
     limits = result['limits']
     totalResults = limits['total']
     if(totalResults != None) :
         speech = "Found %d matches" %(totalResults)
+    elif totalResults == '0':
+        speech = "There isn't anything that matches your criteria"
     else : speech = "There has been an error"
 
     response = {
@@ -77,7 +80,7 @@ def main():
     r.headers['Content-Type'] = 'application/json'
     return r
 
-def video(genre, details, firstName, lastName, mediaType):
+def videoSearch(genre, details, firstName, lastName, mediaType):
     genreFilter = {}
     nameFilter = {}
     inprogressFilter = {}
@@ -93,6 +96,7 @@ def video(genre, details, firstName, lastName, mediaType):
             nameFilter['operator'] = 'contains'
             nameFilter['field'] = detail
 
+            #Kodi is space sensitive, so no space at the end
             if(firstName == '') : nameFilter['value'] = lastName
             elif(lastName == '') : nameFilter['value'] = firstName
             else : nameFilter['value'] = firstName + ' '+ lastName
@@ -109,16 +113,17 @@ def video(genre, details, firstName, lastName, mediaType):
     if(len(inprogressFilter.items()) == 3) : filterList.append(inprogressFilter)
 
     finalFilter = {"and": filterList}
-    if(mediaType == 'movie') : list = my_kodi.VideoLibrary.GetMovies(filter = finalFilter)
-    elif(mediaType == 'tv') : list = my_kodi.VideoLibrary.GetTVShows(filter = finalFilter)
+    if(mediaType == 'movie') : videoList = my_kodi.VideoLibrary.GetMovies(filter = finalFilter)
+    elif(mediaType == 'tv') : videoList = my_kodi.VideoLibrary.GetTVShows(filter = finalFilter)
 
+    #clear the dicts, ready to be reused
     genreFilter = None
     inprogressFilter = None
     nameFilter = None
 
-    return list
+    return videoList
 
-def music(genre, details, artistName):
+def musicSearch(genre, details, artistName):
     genreFilter = {}
     nameFilter = {}
 
@@ -134,12 +139,21 @@ def music(genre, details, artistName):
 
     filterList = []
 
+    #make sure the filters are created before compiling them
+    #a correct filter would have 3 items in it
     if(len(nameFilter.items()) == 3) : filterList.append(nameFilter)
     if(len(genreFilter.items()) == 3) : filterList.append(genreFilter)
 
-    finalFilter = {"and": filterList}
-    songs = my_kodi.AudioLibrary.GetSongs(filter = finalFilter)
+    finalFilter = {"and": filterList} #use 'and' operator to consider every filter
+    songList = my_kodi.AudioLibrary.GetSongs(filter = finalFilter) #get search result from Kodi box
 
+    #clear the dicts, ready to be reused
+    genreFilter = None
+    nameFilter = None
+
+    return songList
+
+#I have no idea what this is for
 if __name__ == '__main__':
     #main()
     port = int(os.getenv('PORT', 5000))
